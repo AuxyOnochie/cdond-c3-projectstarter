@@ -9,8 +9,6 @@ commands:
     steps:
       - run:
           name: Destroy environment
-          # ${CIRCLE_WORKFLOW_ID} is a Built-in environment variable
-          # ${CIRCLE_WORKFLOW_ID:0:5} takes the first 5 chars of the variable CIRCLE_CI_WORKFLOW_ID
           when: on_fail
           command: |
             echo "Destroying environment: << parameters.workflow_id >> "
@@ -208,10 +206,7 @@ jobs:
       # Docker image here that supports NodeJS
     steps:
       - checkout
-      # - run:
-      #     name: Install deps
-      #     command: |
-      #       apk add --update --no-cache tar gzip nodejs npm aws-cli curl
+      
       - restore_cache:
           keys: [backend-build]
       - run:
@@ -365,8 +360,8 @@ workflows:
           #     only: [master]
       - configure-infrastructure:
           requires: [deploy-infrastructure]
-      # - run-migrations:
-      #     requires: [configure-infrastructure]
+      - run-migrations:
+          requires: [configure-infrastructure]
       # - deploy-frontend:
       #     requires: [run-migrations]
       # - deploy-backend:
