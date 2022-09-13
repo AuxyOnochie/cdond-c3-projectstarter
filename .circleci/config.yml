@@ -214,13 +214,14 @@ jobs:
           command: |
             cd backend
             npm install
-            npm run migrations > migrations.txt
-            # ls -al
-            cat migrations.txt
+            npm run build
+            npm run migrations >> migrations_dump.txt
+            ls -al
+            cat migrations_dump.txt
       - run:
           name: Send migration results to kvdb
           command: |
-            if grep -q "has been executed successfully." ~/project/backend/migrations.txt
+            if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
               curl  https://kvdb.io/BR3qzk7SBLVqe68nMNeyfo/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
             fi
